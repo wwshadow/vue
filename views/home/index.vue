@@ -97,12 +97,6 @@ export default {
           totalBuy: 800,
         },
       ],
-      // tableLabel: {
-      //   name: '课程',
-      //   todayBuy: '今日购买',
-      //   monthBuy: '本月购买',
-      //   totalBuy: '总购买',
-      // },
       countData: [
         {
           name: '今日支付订单',
@@ -142,7 +136,7 @@ export default {
         },
       ],
       echartData: {
-        order: {
+        ordermonth: {
           xData: [],
           series: [],
         },
@@ -196,6 +190,7 @@ export default {
         // 组件用法
         this.echartData.order.xData = xData
         this.echartData.order.series = series
+
         this.echartData.user.xData = data.userData.map((item) => item.date)
         this.echartData.user.series = [
           {

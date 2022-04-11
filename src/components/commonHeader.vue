@@ -21,7 +21,7 @@
   </header>
 </template>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 // .el-dropdown-link {
 //   cursor: pointer;
 //   color: #409eff;
@@ -32,21 +32,21 @@
 header {
   display: flex;
   height: 100%;
-  //   justify-content: space-between;
-  //   align-items: center;
+  justify-content: space-between;
+  align-items: center;
 }
 .l-content {
   display: flex;
+  align-content: center;
   align-items: center;
   .el-button {
     margin-right: 20px;
   }
 }
 .r-content {
-  //   display: flex;
   .user {
-    height: 40px;
     width: 40px;
+    height: 40px;
     border-radius: 50%;
   }
 }

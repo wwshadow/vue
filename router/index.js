@@ -22,9 +22,14 @@ const routes = [
                 component: () => import('../views/home'),
             },
             {
-                path: '/test',
-                name: 'test',
-                component: () => import('../views/test'),
+                path: '/csetotal',
+                name: 'csetotal',
+                component: () => import('../views/csetotal'),
+            },
+            {
+                path: '/cseinfo',
+                name: 'cseinfo',
+                component: () => import('../views/cseinfo'),
             }
         ]
         // },
