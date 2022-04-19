@@ -33,7 +33,7 @@
   text-decoration-color: aliceblue;
 }
 .el-menu {
-  height: 100%;
+  height: 960;
   border: none;
   h3 {
     color: #fff;

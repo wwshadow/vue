@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import {
   Button, Radio, Container, Main, Header, Aside, Menu, Submenu, MenuItem, MenuItemGroup, Dropdown, DropdownItem,
-  DropdownMenu, Row, Card, Col, Table, TableColumn, Input, Autocomplete, Link
+  DropdownMenu, Row, Card, Col, Table, TableColumn, Input, Autocomplete, Link, Loading, Descriptions, DescriptionsItem
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // 这里通过ipmport 进行按需引入 Vue.use进行使用，这样的方法适合在大的项目中使用  
@@ -12,7 +12,7 @@ import router from '../router'
 import store from '../store'
 // import echarts from 'echarts'
 import '../api/mock.js'
-
+import VueResource from 'vue-resource'
 
 
 
@@ -40,6 +40,13 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Input)
 Vue.use(Autocomplete)
+Vue.use(Loading)
+Vue.use(Descriptions)
+Vue.use(DescriptionsItem)
+
+
+Vue.use(VueResource)
+
 
 import axios from 'axios';
 Vue.prototype.$axios = axios

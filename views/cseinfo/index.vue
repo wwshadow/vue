@@ -1,8 +1,14 @@
 <template>
   <div>
-    <el-input class="input" v-model.trim="searchInput" placeholder="cse-1589"
-      @keyup.enter.native="getCseInfo(),getCseChildInfo()"></el-input>
-
+    <!-- <el-input class="input" v-model.trim="searchInput" placeholder="cse-1589"
+      @keyup.enter.native="getCseInfo(),getCseChildInfo()"></el-input> -->
+    <el-autocomplete class="input" popper-class="my-autocomplete" v-model.trim="state" @keyup.enter.native="search()"
+      value-key="cseid" :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect" clearable>
+      <template slot-scope="{ item }">
+        <div class="cseid">{{ item.cseid }}</div>
+        <span class="csename">{{ item.csename }}</span>
+      </template>
+    </el-autocomplete>
     <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
       搜索</el-button>
     <el-row class="home" :gutter="20">
@@ -17,9 +23,13 @@
             </div>
           </div>
           <div class="csechild-info">
-            <p>描述信息：</p>
-            <span>{{info.describe}}</span>
+            <p>
+              <el-descriptions class="margin-top" title="描述信息" :column="1" direction="vertical">
+                <el-descriptions-item label="描述信息">{{info.describe}}</el-descriptions-item>
+              </el-descriptions>
+            </p>
           </div>
+
         </el-card>
         <el-card style="margin-top: 20px; height: 500px;">
 
@@ -84,6 +94,7 @@ export default {
       state: '',
       timeout: null,
       searchInput: 'cse-1589',
+      list1: [],
       tableData: [
         {
           createdata: '',
@@ -110,6 +121,9 @@ export default {
       caseTypeData: {
         type: 'test',
         value: '100',
+        // 默认占个位置
+        value2: '100',
+        value3: '100',
       },
       iconData: ['el-icon-cpu'],
       echartData: {
@@ -119,9 +133,6 @@ export default {
         },
       },
     }
-  },
-  props: {
-    msg: String,
   },
 
   methods: {
@@ -134,7 +145,7 @@ export default {
     getCseInfo() {
       axios
         .get('/jirainfo/cse/', {
-          params: { csekey: this.searchInput },
+          params: { csekey: this.state },
         })
         .then((response) => (this.info = response.data))
         .catch((err) => {
@@ -144,7 +155,7 @@ export default {
     getCseChildInfo() {
       axios
         .get('/jirainfo/csechild/', {
-          params: { csekey: this.searchInput },
+          params: { csekey: this.state },
         })
         .then((response) => {
           this.tableData = response.data
@@ -153,35 +164,65 @@ export default {
           console.log(err)
         })
     },
-
-    getCseChildTop3() {
-      axios
-        .get('/jirainfo/csechildtop3/', {
-          params: { csekey: this.searchInput },
-        })
-        .then((response) => (this.info = response.data))
-        .catch((err) => {
-          console.log(err)
-        })
-    },
-
     getCseChildType() {
       axios
         .get('/jirainfo/csetype/', {
-          params: { csekey: this.searchInput },
+          params: { csekey: this.state },
         })
         .then((response) => (this.caseTypeData = response.data))
         .catch((err) => {
           console.log(err)
         })
     },
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants
+      var results = queryString
+        ? restaurants.filter(this.createStateFilter(queryString))
+        : restaurants
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    createStateFilter(queryString) {
+      return (state) => {
+        return (
+          state.cseid.toLowerCase().indexOf(queryString.toLowerCase()) === 0 ||
+          state.csename.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        )
+      }
+    },
+    //暂时无用
+    loadAll() {
+      let resdata = []
+      axios({
+        url: 'http://192.168.10.130:8080/csetotal.json',
+        modules: 'GET',
+      })
+        .then((res) => {
+          resdata = res
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      return resdata.data
+    },
+    loadAll2() {
+      // let resdata = {}
+      this.$http.get('http://192.168.10.130:8080/csetotal.json').then((res) => {
+        this.list1 = [res.data]
+        this.restaurants = this.list1[0].data
+      })
+    },
+    handleSelect(item) {
+      console.log('item', item)
+    },
   },
   mounted() {
+    this.loadAll2()
     var that = this
     that.getCseMonth = function () {
       axios
         .get('/jirainfo/csemonth/', {
-          params: { csekey: this.searchInput },
+          params: { csekey: this.state },
         })
         .then((response) => {
           this.echartData.csenum.xData = this.tableDataByMouth
@@ -203,6 +244,26 @@ export default {
 <style lang="less" scoped>
 .input {
   margin-top: 20px;
-  width: 100px;
+  // width: 100px;
+}
+.my-autocomplete {
+  li {
+    line-height: normal;
+    padding: 7px;
+
+    .cseid {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .csename {
+      text-overflow: ellipsis;
+      font-size: 12px;
+      color: #b4b4b4;
+    }
+
+    .highlighted .addr {
+      color: #ddd;
+    }
+  }
 }
 </style>
