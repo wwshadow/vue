@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- <el-input class="input" v-model.trim="searchInput" placeholder="cse-1589"
-      @keyup.enter.native="getCseInfo(),getCseChildInfo()"></el-input> -->
     <el-autocomplete class="input" popper-class="my-autocomplete" v-model.trim="state" @keyup.enter.native="search()"
       value-key="cseid" :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect" clearable>
       <template slot-scope="{ item }">
@@ -11,7 +9,7 @@
     </el-autocomplete>
     <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
       搜索</el-button>
-    <el-row class="home" :gutter="20">
+    <el-row class="jiracse" :gutter="20">
       <el-col :span="9" style="margin-top: 20px">
         <el-card shadow="hover">
           <div class="cse">
@@ -33,7 +31,7 @@
         </el-card>
         <el-card style="margin-top: 20px; height: 500px;">
 
-          <el-table max-height="400" :data="tableData" :default-sort="{prop: 'createdata', order: 'descending'}">
+          <el-table max-height="500" :data="tableData" :default-sort="{prop: 'createdata', order: 'descending'}">
             <el-table-column fixed prop="createdata" label="创建日期" width="100" sortable>
             </el-table-column>
             <el-table-column prop="issueid" label="ESDESK-id" width="150">

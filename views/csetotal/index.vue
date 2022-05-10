@@ -8,30 +8,32 @@
         <span class="csename">{{ item.csename }}</span>
       </template>
     </el-autocomplete>
-    <!-- <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
-      搜索</el-button> -->
+    <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
+      搜索</el-button>
+      <el-button style="margin-left: 10px;" type="primary"  v-on:click="updatejirasql"><i class="el-icon-upload el-icon--right"></i>
+      更新数据库</el-button>
     <el-row class="home" :gutter="20">
       <el-col :span="24" style="margin-top: 20px">
         <el-card shadow="hover">
           <el-table v-loading="loading" element-loading-text="数据拼命加载中" :data="tableData" border style="width: 100%"
             height="700">
-            <el-table-column prop="cseid" label="cseID" width="180">
+            <el-table-column prop="fields.cseid" label="cseID" width="180">
             </el-table-column>
-            <el-table-column prop="csename" label="cse名称" width="180">
+            <el-table-column prop="fields.csename" label="cse名称" width="180">
             </el-table-column>
-            <el-table-column prop="csestatus" label="cse状态" width="180">
+            <el-table-column prop="fields.csestatus" label="cse状态" width="180">
             </el-table-column>
-            <el-table-column prop="fullname" label="客户组织名称" width="180">
+            <el-table-column prop="fields.fullname" label="客户组织名称" width="180">
             </el-table-column>
-            <el-table-column prop="customername" label="客户名称" width="180">
+            <el-table-column prop="fields.customername" label="客户名称" width="180">
             </el-table-column>
-            <el-table-column prop="projectname" label="项目名称" width="180">
+            <el-table-column prop="fields.projectname" label="项目名称" width="180">
             </el-table-column>
-            <el-table-column prop="version" label="当前版本" width="180">
+            <el-table-column prop="fields.version" label="当前版本" width="180">
             </el-table-column>
-            <el-table-column prop="maintenancedate" label="维保到期时间" width="180">
+            <el-table-column prop="fields.maintenancedate" label="维保到期时间" width="180">
             </el-table-column>
-            <el-table-column prop="environmenttype" label="环境类型">
+            <el-table-column prop="fields.environmenttype" label="环境类型">
             </el-table-column>
           </el-table>
         </el-card>
@@ -56,7 +58,8 @@ export default {
       restaurants: [],
       list1: [],
       state: '',
-      tableData: [
+      tableData: [{
+        fields:
         {
           cseid: '',
           csename: '',
@@ -67,7 +70,7 @@ export default {
           version: '',
           maintenancedate: '',
           environmenttype: '',
-        },
+        },}
       ],
       loading: true,
       searchInput: 'cse-1589',
@@ -86,6 +89,7 @@ export default {
   //   },
   props: {},
   methods: {
+  
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
       var results = queryString
@@ -131,10 +135,32 @@ export default {
     search() {
       // this.loadAll()
     },
-    getCseChildInfo() {
-      axios
+    updatejirasql(){
+        // 更新数据库
+        axios
         .get('/jirainfo/csetotal')
         .then((response) => {
+          console.log(response)
+          if (response.data === 'ok'){
+              alert('更新完成！')
+              this.loading = false
+          }
+          
+        })
+        .catch((err) => {
+          // this.alert('err')
+          this.loading = false
+          alert('更新失败，请检查网络及服务状态！')
+          console.log(err)
+        })
+
+    },
+    getCseChildInfo() {
+      // 查询数据库
+      axios
+        .get('/jirainfo/getcsetotal')
+        .then((response) => {
+          console.log(response)
           this.tableData = response.data
           this.loading = false
         })

@@ -13,7 +13,7 @@
         <span slot="title">{{item.label}}</span>
       </template>
       <el-menu-item-group v-for="(subItem, subIndex) in item.children" :key="subItem.path">
-        <el-menu-item :index="subIndex + ''">{{subItem.label}}</el-menu-item>
+        <el-menu-item @click="clickMemu(subItem)" :index="subIndex.toString()">{{subItem.label}}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <!-- <el-menu-item index="3" disabled>
@@ -69,23 +69,30 @@ export default {
           icon: 'user',
           url: 'cseinfo/cseinfo',
         },
+                {
+          path: '/jirauserinfo',
+          name: 'jiraUserInfo',
+          label: '用户详细',
+          icon: 'user',
+          url: 'cseinfo/jirauserinfo',
+        },
         {
           label: '其他',
           icon: 'location',
           children: [
             {
-              path: '/test1',
-              name: 'test1',
+              path: '/page1',
+              name: 'pageOne',
               label: 'test1',
               icon: 'setting',
-              url: 'test1/test1',
+              url: 'page1/page1',
             },
             {
-              path: '/test2',
-              name: 'test2',
+              path: '/page2',
+              name: 'pageTow',
               label: 'test2',
               icon: 'setting',
-              url: 'test2/test2',
+              url: 'page2/page2',
             },
           ],
         },

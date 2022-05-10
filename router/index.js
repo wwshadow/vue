@@ -15,6 +15,7 @@ const routes = [
         path: '/',
         name: 'Main',
         component: () => import('../views/Main.vue'),
+        redirect: '/home',
         children: [
             {
                 path: '/home',
@@ -30,6 +31,21 @@ const routes = [
                 path: '/cseinfo',
                 name: 'cseinfo',
                 component: () => import('../views/cseinfo'),
+            },
+            {
+                path: '/jirauserinfo',
+                name: 'jiraUserInfo',
+                component: () => import('../views/jirauserinfo'),
+            },
+            {
+                path: '/page1',
+                name: 'pageOne',
+                component: () => import('../views/other/pageOne.vue'),
+            },
+            {
+                path: '/page2',
+                name: 'pageTow',
+                component: () => import('../views/other/pageTow.vue'),
             }
         ]
         // },
