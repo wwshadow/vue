@@ -49,102 +49,54 @@
             <el-table-column prop="issuestatus" label="case状态" width="80">
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
-              // eslint-disable-next-line vue/no-unused-vars
+
               <template slot-scope="scope">
                 <!-- slot-scope="scope" -->
-                <!-- <p>姓名: {{ scope.row.name }}</p> -->
-                <el-button @click="dialogFormVisible = true, tsts(scope.row.issueid)" type="primary" icon="el-icon-edit"
-                  size="small">
-                  填写工时
-                </el-button>
-                <el-dialog title="工时填写" :visible.sync="dialogFormVisible" :modal=false>
+                <!-- <p>姓名: {{ scope.row.issueid }}</p> -->
+                <el-button @click="ShowDialog" type="primary" icon="el-icon-edit" size="small">
+                  填写工时<p>{{ dialogVisible }}</p>
+                  <tompe-dialog :dialogVisible="dialogVisible" :accuseitem="accuseitem" :childid="scope.row.issueid"
+                    @close-dialogStatus="CloseDialog">
+                  </tompe-dialog>
 
-                  <el-form :model="form">
-                    <el-form-item label="自动" :label-width="formLabelWidth">
-                      <el-switch style="display: block" v-model="is_autofill" active-color="#ff494"
-                        inactive-color="#13ce66" active-text="自动填写当周工时(还没做)" inactive-text="手动填写当前esdesk工时">
-                      </el-switch>
-                    </el-form-item>
-                    <el-form-item label="用户id" :label-width="formLabelWidth">
-                      <el-input v-model="workerId" autocomplete="on"></el-input>
-                    </el-form-item>
-                    <el-form-item label="caseid" :label-width="formLabelWidth">
-                      <el-input v-model="sts" autocomplete="on"></el-input>
-                    </el-form-item>
-                    <el-form-item label="工时" :label-width="formLabelWidth">
-                      <el-input v-model="tompetime" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Authorization认证">
-                      <el-input type="textarea" v-model="Authorization" autocomplete="on"
-                        :autosize="{ minRows: 2, maxRows: 4 }" placeholder="请输入tompe Authorization"></el-input>
-                    </el-form-item>
-                    <el-form-item label="活动区域" :label-width="formLabelWidth">
-                      <el-select v-model="form.region" placeholder="请选择活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-form>
-                  <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="posttempo(scope.row.issueid)">确 定</el-button>
-                  </div>
-                </el-dialog>
-                <!-- @click="handleClick(scope.row)" -->
-                <!-- <el-button type="text" size="small">编辑</el-button> -->
+                </el-button>
+
               </template>
             </el-table-column>
           </el-table>
         </el-card>
       </el-col>
       <el-col :span="9" style="margin-top: 20px">
-        <!-- <el-card shadow="hover">
-          <div>
-            <p>
-              最近一个月case情况
-            </p>
-          </div>
-          <el-table max-height="400" :data="tableData" :default-sort="{prop: 'createdata', order: 'descending'}">
-            <el-table-column fixed prop="createdata" label="创建日期" width="100" sortable>
-            </el-table-column>
-            <el-table-column prop="issueid" label="ESDESK-id" width="150">
-              <template slot-scope="scope">
-                <el-link type="primary" :href="'https://easystack.atlassian.net/browse/'+scope.row.issueid"
-                  target="_blank">
-                  {{scope.row.issueid}}</el-link>
-              </template>
-            </el-table-column>
-            <el-table-column prop="esdeskname" label="描述" width="150">
-            </el-table-column>
-            <el-table-column prop="issuetype" label="类型" width="130">
-            </el-table-column>
-            <el-table-column prop="issuestatus" label="case状态" width="80">
-            </el-table-column>
-            <el-table-column prop="timespent" label="工时(h)">
-            </el-table-column>
-          </el-table>
-        </el-card> -->
+
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import TompeDialog from './TompeDialog.vue'
 export default {
-  name: 'pageOne',
+  name: 'jiraUserInfo',
+  components: {
+    TompeDialog,
+  },
+
   data() {
     return {
-      sts: "",
-      usrimg: require('../../src/assets/images/OIP-C.jpg'),
       info: {},
-      restaurants: [],
+      usrimg: require('../../src/assets/images/OIP-C.jpg'),
+      // dialog
+      accuseitem: {},
+      dialogVisible: false,
+
+
       workerId: '5f812189287870006a5c85b4',
       timeout: null,
       list1: [],
-      // esdeskid: '',
+      filldatetime: '',
+      childid: '',
+
       is_autofill: false,
-      Authorization: '',
-      tompetime: '70',
       tableData: [
         {
           createdata: '',
@@ -155,24 +107,40 @@ export default {
           timespent: '',
         },
       ],
-      dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
-      },
-      formLabelWidth: '120px',
     }
   },
-  // props: { esdeskid: '' },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    dialogVisible(newvalue, oldvalue) {
+      console.log("dialogVisible", this.dialogVisible, newvalue)
+      // this.vis = newvalues
+      console.log("dialogVisible", this.dialogVisible)
+    }
+  },
+  // watch:{
+  //   // eslint-disable-next-line vue/no-arrow-functions-in-watch
+  //   Visible:(newvalue,oldvalue)=>{
+  //     console.log(newvalue,oldvalue)
+  //   }
+  // },
   methods: {
     sss() { },
-    async tsts(rs) {
-      return this.sts = rs
+    // dialog
+    async getesdeskid(rows) {
+      this.childid = rows
+      console.log("rows", rows)
     },
+    // eslint-disable-next-line no-unused-vars
+
+    // eslint-disable-next-line no-unused-vars
+    ShowDialog() {
+      // this.accuseitem = item
+      this.dialogVisible = true
+    },
+    CloseDialog() {
+      this.dialogVisible = false
+    },
+
     posttempo(esdeskid) {
       // let resdata = []
       axios({
@@ -182,6 +150,7 @@ export default {
           is_autofill: this.is_autofill,
           tompetime: this.tompetime,
           esdeskid: esdeskid,
+          filldatetime: this.filldatetime,
           Authorization: this.Authorization,
           workerId: this.workerId,
         },

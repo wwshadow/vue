@@ -10,8 +10,10 @@
     </el-autocomplete>
     <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
       搜索</el-button>
-      <el-button style="margin-left: 10px;" type="primary"  v-on:click="updatejirasql"><i class="el-icon-upload el-icon--right"></i>
-      更新数据库</el-button>
+    <el-button style="margin-left: 10px;" type="primary" v-on:click="updatejirasql">
+      <i class="el-icon-upload"></i>
+      更新数据库
+    </el-button>
     <el-row class="home" :gutter="20">
       <el-col :span="24" style="margin-top: 20px">
         <el-card shadow="hover">
@@ -58,19 +60,20 @@ export default {
       restaurants: [],
       list1: [],
       state: '',
-      tableData: [{
-        fields:
+      tableData: [
         {
-          cseid: '',
-          csename: '',
-          csestatus: '',
-          customername: '',
-          projectname: '',
-          fullname: '',
-          version: '',
-          maintenancedate: '',
-          environmenttype: '',
-        },}
+          fields: {
+            cseid: '',
+            csename: '',
+            csestatus: '',
+            customername: '',
+            projectname: '',
+            fullname: '',
+            version: '',
+            maintenancedate: '',
+            environmenttype: '',
+          },
+        },
       ],
       loading: true,
       searchInput: 'cse-1589',
@@ -89,7 +92,6 @@ export default {
   //   },
   props: {},
   methods: {
-  
     querySearch(queryString, cb) {
       var restaurants = this.restaurants
       var results = queryString
@@ -135,17 +137,16 @@ export default {
     search() {
       // this.loadAll()
     },
-    updatejirasql(){
-        // 更新数据库
-        axios
+    updatejirasql() {
+      // 更新数据库
+      axios
         .get('/jirainfo/csetotal')
         .then((response) => {
           console.log(response)
-          if (response.data === 'ok'){
-              alert('更新完成！')
-              this.loading = false
+          if (response.data === 'ok') {
+            alert('更新完成！')
+            this.loading = false
           }
-          
         })
         .catch((err) => {
           // this.alert('err')
@@ -153,7 +154,6 @@ export default {
           alert('更新失败，请检查网络及服务状态！')
           console.log(err)
         })
-
     },
     getCseChildInfo() {
       // 查询数据库

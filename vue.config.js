@@ -6,4 +6,7 @@ module.exports = defineConfig({
   /* baseUrl: process.env.NODE_ENV === 'production' ? './' : '/' */
   publicPath: process.env.NODE_ENV === 'production' ? '/public/' : './',
   // devtool: 'cheap-module-eval-source-map'
+  configureWebpack: {
+    devtool: 'source-map'
+  },
 })

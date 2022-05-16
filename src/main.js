@@ -3,7 +3,8 @@ import App from './App.vue'
 import {
   Button, Radio, Container, Main, Header, Aside, Menu, Submenu, MenuItem, MenuItemGroup, Dropdown, DropdownItem,
   DropdownMenu, Row, Card, Col, Table, TableColumn, Input, Autocomplete, Link, Loading, Descriptions, DescriptionsItem
-  , Select, Option, OptionGroup, Switch, Dialog, Form, FormItem
+  , Select, Option, OptionGroup, Switch, Dialog, Form, FormItem,
+  DatePicker, Tooltip, Carousel, CarouselItem
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // 这里通过ipmport 进行按需引入 Vue.use进行使用，这样的方法适合在大的项目中使用  
@@ -51,6 +52,10 @@ Vue.use(Switch)
 Vue.use(Dialog)
 Vue.use(Form)
 Vue.use(FormItem)
+Vue.use(DatePicker)
+Vue.use(Tooltip)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
 
 Vue.use(VueResource)
 

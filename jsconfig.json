@@ -9,6 +9,8 @@
         "src/*"
       ]
     },
+    // "jsx": "preserve",
+    // "experimentalshamfullysupportoptionsapi": false,
     "lib": [
       "esnext",
       "dom",
