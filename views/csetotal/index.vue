@@ -1,19 +1,43 @@
 <template>
   <div>
 
-    <el-autocomplete class="input" popper-class="my-autocomplete" v-model="state" value-key="cseid"
+    <el-input placeholder="请输入内容" v-model="selectinfo" style="width: 15%;margin-top: 20px;" class="input-with-select">
+      <el-select v-model="selectcse" slot="prepend" placeholder="请选择" style="width: 50%">
+        <el-option label="cse Id" value="1"></el-option>
+        <el-option label="cse名称" value="2"></el-option>
+        <el-option label="客户名称" value="3"></el-option>
+      </el-select>
+
+    </el-input>
+
+    <el-button style="margin-left: 10px;" icon="el-icon-search" type="primary" v-on:click="selectcseinfo"></el-button>
+
+
+
+    <!-- <el-autocomplete class="input" popper-class="my-autocomplete" v-model="state" value-key="cseid"
       :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect" clearable>
       <template slot-scope="{ item }">
         <div class="cseid">{{ item.cseid }}</div>
         <span class="csename">{{ item.csename }}</span>
       </template>
-    </el-autocomplete>
-    <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
-      搜索</el-button>
+    </el-autocomplete> -->
+
+    <!-- <el-input size="small" placeholder="请输入内容" v-model="input3" style="margin-top: 20px" clearable>
+      <el-select v-model="select" slot="prepend" placeholder="请选择">
+        <el-option label="餐厅名" value="1"></el-option>
+        <el-option label="订单号" value="2"></el-option>
+        <el-option label="用户电话" value="3"></el-option>
+      </el-select>
+    </el-input> -->
+
+
+    <!-- <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
+      搜索</el-button> -->
     <el-button style="margin-left: 10px;" type="primary" v-on:click="updatejirasql">
       <i class="el-icon-upload"></i>
       更新数据库
     </el-button>
+
     <el-row class="home" :gutter="20">
       <el-col :span="24" style="margin-top: 20px">
         <el-card shadow="hover">
@@ -48,6 +72,7 @@
 
 <script>
 import axios from 'axios'
+
 // import EChart from '../../src/components/ECharts.vue'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -60,6 +85,8 @@ export default {
       restaurants: [],
       list1: [],
       state: '',
+      selectinfo: '',
+      selectcse: '',
       tableData: [
         {
           fields: {
@@ -109,20 +136,7 @@ export default {
       }
     },
     //暂时无用
-    loadAll() {
-      let resdata = []
-      axios({
-        url: 'http://192.168.10.130:8080/csetotal.json',
-        modules: 'GET',
-      })
-        .then((res) => {
-          resdata = res
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-      return resdata.data
-    },
+
     loadAll2() {
       // let resdata = {}
       this.$http.get('http://192.168.10.130:8080/csetotal.json').then((res) => {
@@ -135,7 +149,93 @@ export default {
     },
 
     search() {
-      // this.loadAll()
+      // if(this.selectcse === "1"){
+      //   data:{cseid: this.selectinfo}
+      // }
+    },
+    selectcseinfo() {
+      if (this.selectcse === "1") {
+        axios({
+          url: '/jirainfo/selectcse/',
+          method: 'post',
+          data: {
+            cseid: this.selectinfo,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+        })
+          .then((response) => {
+            // console.log("默认",response)
+            if (response.data.length !== 0) {
+              this.tableData = response.data
+            }
+            else { console.log("没有数据", response.data) }
+
+          })
+          .catch((err) => {
+            // this.alert('err')
+            // this.loading = false
+            alert('查询不存在！')
+            console.log(err)
+          })
+      }
+
+      else if (this.selectcse === "2") {
+        axios({
+          url: '/jirainfo/selectcse/',
+          method: 'post',
+          data: {
+            csename: this.selectinfo,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+        })
+          .then((response) => {
+            // console.log("默认",response)
+            if (response.data.length !== 0) {
+              this.tableData = response.data
+            }
+            else { console.log("没有数据", response.data) }
+
+          })
+          .catch((err) => {
+            // this.alert('err')
+            // this.loading = false
+            alert('查询不存在！')
+            console.log(err)
+          })
+      }
+      else if (this.selectcse === "3") {
+        axios({
+          url: '/jirainfo/selectcse/',
+          method: 'post',
+          data: {
+            customername: this.selectinfo,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+        })
+          .then((response) => {
+            // console.log("默认",response)
+            if (response.data.length !== 0) {
+              this.tableData = response.data
+            }
+            else { console.log("没有数据", response.data) }
+
+          })
+          .catch((err) => {
+            // this.alert('err')
+            // this.loading = false
+            alert('查询不存在！')
+            console.log(err)
+          })
+      }
     },
     updatejirasql() {
       // 更新数据库
@@ -160,7 +260,7 @@ export default {
       axios
         .get('/jirainfo/getcsetotal')
         .then((response) => {
-          console.log(response)
+          // console.log(response)
           this.tableData = response.data
           this.loading = false
         })
@@ -179,6 +279,21 @@ export default {
   margin-top: 20px;
   // width: 100px;
 }
+
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
+}
+
+/deep/ .el-select .el-input {
+  width: 130px;
+}
+
+.bbb /deep/ #input1 {
+  min-height: 30px;
+  margin: 0px;
+  width: 250px;
+}
+
 .my-autocomplete {
   li {
     line-height: normal;
@@ -188,6 +303,7 @@ export default {
       text-overflow: ellipsis;
       overflow: hidden;
     }
+
     .csename {
       // word-break: break-all;
       // word-wrap: break-word;
