@@ -4,7 +4,7 @@ import {
   Button, Radio, Container, Main, Header, Aside, Menu, Submenu, MenuItem, MenuItemGroup, Dropdown, DropdownItem,
   DropdownMenu, Row, Card, Col, Table, TableColumn, Input, Autocomplete, Link, Loading, Descriptions, DescriptionsItem
   , Select, Option, OptionGroup, Switch, Dialog, Form, FormItem,
-  DatePicker, Tooltip, Carousel, CarouselItem
+  DatePicker, Tooltip, Carousel, CarouselItem,Pagination
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // 这里通过ipmport 进行按需引入 Vue.use进行使用，这样的方法适合在大的项目中使用  
@@ -56,6 +56,7 @@ Vue.use(DatePicker)
 Vue.use(Tooltip)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
+Vue.use(Pagination)
 
 Vue.use(VueResource)
 
@@ -69,7 +70,7 @@ Vue.prototype.$axios = axios
 //     'Accept': 'application/json',
 //   }
 // })
-axios.defaults.baseURL = "http://192.168.10.130:8100"
+axios.defaults.baseURL = "http://192.168.10.130:8100/jirainfo/v1/"
 axios.defaults.headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',

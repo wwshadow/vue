@@ -70,7 +70,7 @@ export default {
     posttempo() {
       // let resdata = []
       axios({
-        url: '/jirainfo/filltompe/',
+        url: '/filltompe/',
         method: 'post',
         data: {
           is_autofill: this.is_autofill,

@@ -39,6 +39,10 @@
           <el-table-column prop="version" label="当前版本" width="180">
           </el-table-column>
         </el-table>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" small
+          :current-page.sync="currentPage" layout="total, prev, pager, next, jumper" :page-size="pageSize"
+          :pager-count="7" :total="total">
+        </el-pagination>
       </el-col>
     </el-card>
   </div>
@@ -62,6 +66,11 @@ export default {
   data() {
     return {
       ss: "",
+      currentPage: 1, // 当前页码
+      total: 20, // 总条数
+      pageSize: 3,// 每页的数据条数
+      totalNum: 1000,//总页数
+
       tableData: [
         {
           ecsid: '',
@@ -77,18 +86,60 @@ export default {
     }
   },
   created() {
-    this.getEcsByMonthInfo()
+    // this.getEcsByMonthInfo()
+    this.getlivestockInfo(1)
   },
   mounted() {
     // this.$http
   },
   methods: {
+    //每页条数改变时触发 选择一页显示多少行
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      // this.currentPage = 1;
+      // this.pageSize = 3;
+    },
+    //当前页改变时触发 跳转其他页
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      console.log('ye', this.currentPage)
+      // this.currentPage = val;
+      this.getlivestockInfo(this.currentPage);
+
+    },
+    getlivestockInfo(num1) {
+      var that = this;
+      console.log("num1", num1)
+      // var params = new URLSearchParams();
+      // params.append('page', num1)
+
+
+      axios.get('/ecsbymonthpage', {
+        params: {
+          currentPage: num1,
+          pageSize: this.pageSize,
+        }
+      })
+        .then(response => {
+          console.log("页码", response.data.data)
+          console.log("totle", response.data)
+          this.tableData = response.data.data
+          that.currentPage = num1;
+          that.total = response.data.total;
+          // that.total =  response.data.page_sum;
+          console.log('请求成功, 获取' + that.total + "条数据");
+        })
+        .catch(error => {  // 请求失败
+          console.log('请求失败');
+          console.log(error);
+        })
+    },
     getEcsByMonthInfo() {
       // 查询数据库
       axios
-        .get('/jirainfo/ecsbymonth')
+        .get('/ecsbymonth')
         .then((response) => {
-          console.log(response)
+          console.log("完整", response.data)
           this.tableData = response.data
           this.loading = false
         })

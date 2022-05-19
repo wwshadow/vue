@@ -13,26 +13,6 @@
     <el-button style="margin-left: 10px;" icon="el-icon-search" type="primary" v-on:click="selectcseinfo"></el-button>
 
 
-
-    <!-- <el-autocomplete class="input" popper-class="my-autocomplete" v-model="state" value-key="cseid"
-      :fetch-suggestions="querySearch" placeholder="请输入内容" @select="handleSelect" clearable>
-      <template slot-scope="{ item }">
-        <div class="cseid">{{ item.cseid }}</div>
-        <span class="csename">{{ item.csename }}</span>
-      </template>
-    </el-autocomplete> -->
-
-    <!-- <el-input size="small" placeholder="请输入内容" v-model="input3" style="margin-top: 20px" clearable>
-      <el-select v-model="select" slot="prepend" placeholder="请选择">
-        <el-option label="餐厅名" value="1"></el-option>
-        <el-option label="订单号" value="2"></el-option>
-        <el-option label="用户电话" value="3"></el-option>
-      </el-select>
-    </el-input> -->
-
-
-    <!-- <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
-      搜索</el-button> -->
     <el-button style="margin-left: 10px;" type="primary" v-on:click="updatejirasql">
       <i class="el-icon-upload"></i>
       更新数据库
@@ -44,6 +24,10 @@
           <el-table v-loading="loading" element-loading-text="数据拼命加载中" :data="tableData" border style="width: 100%"
             height="700">
             <el-table-column prop="fields.cseid" label="cseID" width="180">
+              <template slot-scope="scope">
+                <el-link type="primary" :href="'/#/cseinfo/' " target="_blank">
+                  {{ scope.row.fields.cseid }}</el-link>
+              </template>
             </el-table-column>
             <el-table-column prop="fields.csename" label="cse名称" width="180">
             </el-table-column>
@@ -82,8 +66,6 @@ export default {
   data() {
     return {
       timeout: null,
-      restaurants: [],
-      list1: [],
       state: '',
       selectinfo: '',
       selectcse: '',
@@ -103,60 +85,25 @@ export default {
         },
       ],
       loading: true,
-      searchInput: 'cse-1589',
     }
   },
 
   created() {
     this.getCseChildInfo()
   },
-  mounted() {
-    this.loadAll2()
-  },
+  // mounted() {
+  //   this.loadAll2()
+  // },
   //   watch(){
   // getCseChildInfo(),
   // deep:true,
   //   },
   props: {},
   methods: {
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString
-        ? restaurants.filter(this.createStateFilter(queryString))
-        : restaurants
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createStateFilter(queryString) {
-      return (state) => {
-        return (
-          state.cseid.toLowerCase().indexOf(queryString.toLowerCase()) === 0 ||
-          state.csename.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-        )
-      }
-    },
-    //暂时无用
-
-    loadAll2() {
-      // let resdata = {}
-      this.$http.get('http://192.168.10.130:8080/csetotal.json').then((res) => {
-        this.list1 = [res.data]
-        this.restaurants = this.list1[0].data
-      })
-    },
-    handleSelect(item) {
-      console.log('item', item)
-    },
-
-    search() {
-      // if(this.selectcse === "1"){
-      //   data:{cseid: this.selectinfo}
-      // }
-    },
     selectcseinfo() {
       if (this.selectcse === "1") {
         axios({
-          url: '/jirainfo/selectcse/',
+          url: '/selectcse/',
           method: 'post',
           data: {
             cseid: this.selectinfo,
@@ -171,7 +118,10 @@ export default {
             if (response.data.length !== 0) {
               this.tableData = response.data
             }
-            else { console.log("没有数据", response.data) }
+            else {
+              alert("查询异常，没有数据")
+              console.log("没有数据", response.data)
+            }
 
           })
           .catch((err) => {
@@ -184,7 +134,7 @@ export default {
 
       else if (this.selectcse === "2") {
         axios({
-          url: '/jirainfo/selectcse/',
+          url: '/selectcse/',
           method: 'post',
           data: {
             csename: this.selectinfo,
@@ -199,7 +149,10 @@ export default {
             if (response.data.length !== 0) {
               this.tableData = response.data
             }
-            else { console.log("没有数据", response.data) }
+            else {
+              alert("查询异常，没有数据")
+              console.log("没有数据", response.data)
+            }
 
           })
           .catch((err) => {
@@ -211,7 +164,7 @@ export default {
       }
       else if (this.selectcse === "3") {
         axios({
-          url: '/jirainfo/selectcse/',
+          url: '/selectcse/',
           method: 'post',
           data: {
             customername: this.selectinfo,
@@ -226,7 +179,10 @@ export default {
             if (response.data.length !== 0) {
               this.tableData = response.data
             }
-            else { console.log("没有数据", response.data) }
+            else {
+              alert("查询异常，没有数据")
+              console.log("没有数据", response.data)
+            }
 
           })
           .catch((err) => {
@@ -240,7 +196,7 @@ export default {
     updatejirasql() {
       // 更新数据库
       axios
-        .get('/jirainfo/csetotal')
+        .get('/csetotal')
         .then((response) => {
           console.log(response)
           if (response.data === 'ok') {
@@ -258,7 +214,7 @@ export default {
     getCseChildInfo() {
       // 查询数据库
       axios
-        .get('/jirainfo/getcsetotal')
+        .get('/getcsetotal')
         .then((response) => {
           // console.log(response)
           this.tableData = response.data

@@ -15,15 +15,15 @@
           <div class="cse">
             <img height="50px" width="50px" border-radius=50%; :src="usrimg" />
             <div class="cseinfo">
-              <p class="name">客户名称：</p><span>{{info.customername}}</span>
-              <p class="access">项目名称：</p><span>{{info.projectname}}</span>
-              <p class="fullname">完整名：</p><span>{{info.fullname}}</span>
+              <p class="name">客户名称：</p><span>{{ info.customername }}</span>
+              <p class="access">项目名称：</p><span>{{ info.projectname }}</span>
+              <p class="fullname">完整名：</p><span>{{ info.fullname }}</span>
             </div>
           </div>
           <div class="csechild-info">
             <p>
               <el-descriptions class="margin-top" title="描述信息" :column="1" direction="vertical">
-                <el-descriptions-item label="描述信息">{{info.describe}}</el-descriptions-item>
+                <el-descriptions-item label="描述信息">{{ info.describe }}</el-descriptions-item>
               </el-descriptions>
             </p>
           </div>
@@ -31,14 +31,14 @@
         </el-card>
         <el-card style="margin-top: 20px; height: 500px;">
 
-          <el-table max-height="500" :data="tableData" :default-sort="{prop: 'createdata', order: 'descending'}">
+          <el-table max-height="500" :data="tableData" :default-sort="{ prop: 'createdata', order: 'descending' }">
             <el-table-column fixed prop="createdata" label="创建日期" width="100" sortable>
             </el-table-column>
             <el-table-column prop="issueid" label="ESDESK-id" width="150">
               <template slot-scope="scope">
-                <el-link type="primary" :href="'https://easystack.atlassian.net/browse/'+scope.row.issueid"
+                <el-link type="primary" :href="'https://easystack.atlassian.net/browse/' + scope.row.issueid"
                   target="_blank">
-                  {{scope.row.issueid}}</el-link>
+                  {{ scope.row.issueid }}</el-link>
               </template>
             </el-table-column>
             <el-table-column prop="esdeskname" label="描述" width="150">
@@ -53,12 +53,12 @@
       <el-col :span="15" style="margin-top: 20px">
         <p style="font-size: 22px; margin-bottom: 10px; color: #999999;">当前项目case分类统计:</p>
         <div class="num">
-          <el-card v-for="item in caseTypeData" :key="item.type" :body-style="{display: 'flex',padding: 0}">
+          <el-card v-for="item in caseTypeData" :key="item.type" :body-style="{ display: 'flex', padding: 0 }">
 
-            <i class="icon" :class="['el-icon-cpu']" :style="{background: '#ffb980'}"></i>
+            <i class="icon" :class="['el-icon-cpu']" :style="{ background: '#ffb980' }"></i>
             <div class="detail">
-              <p class="num">{{item.value}}</p>
-              <p class="txt">{{item.type}}</p>
+              <p class="num">{{ item.value }}</p>
+              <p class="txt">{{ item.type }}</p>
             </div>
           </el-card>
         </div>
@@ -132,7 +132,12 @@ export default {
       },
     }
   },
-
+  // watch: {
+  //   '$roure'(to,from){
+  //     console.log(to)
+  //     console.log(from)
+  //   }
+  // },
   methods: {
     search() {
       this.getCseInfo(),
@@ -142,7 +147,7 @@ export default {
     },
     getCseInfo() {
       axios
-        .get('/jirainfo/cse/', {
+        .get('/cse/', {
           params: { csekey: this.state },
         })
         .then((response) => (this.info = response.data))
@@ -152,7 +157,7 @@ export default {
     },
     getCseChildInfo() {
       axios
-        .get('/jirainfo/csechild/', {
+        .get('/csechild/', {
           params: { csekey: this.state },
         })
         .then((response) => {
@@ -164,7 +169,7 @@ export default {
     },
     getCseChildType() {
       axios
-        .get('/jirainfo/csetype/', {
+        .get('/csetype/', {
           params: { csekey: this.state },
         })
         .then((response) => (this.caseTypeData = response.data))
@@ -219,7 +224,7 @@ export default {
     var that = this
     that.getCseMonth = function () {
       axios
-        .get('/jirainfo/csemonth/', {
+        .get('/csemonth/', {
           params: { csekey: this.state },
         })
         .then((response) => {
@@ -244,6 +249,7 @@ export default {
   margin-top: 20px;
   // width: 100px;
 }
+
 .my-autocomplete {
   li {
     line-height: normal;
@@ -253,6 +259,7 @@ export default {
       text-overflow: ellipsis;
       overflow: hidden;
     }
+
     .csename {
       text-overflow: ellipsis;
       font-size: 12px;

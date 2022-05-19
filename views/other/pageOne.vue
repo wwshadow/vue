@@ -176,7 +176,7 @@ export default {
     posttempo(esdeskid) {
       // let resdata = []
       axios({
-        url: '/jirainfo/filltompe/',
+        url: '/filltompe/',
         method: 'post',
         data: {
           is_autofill: this.is_autofill,
@@ -264,7 +264,7 @@ export default {
 
     GetUserCaseInfo() {
       axios
-        .get('/jirainfo/usercase/', {
+        .get('/usercase/', {
           params: { userid: this.workerId },
         })
         .then((response) => (this.tableData = response.data))
