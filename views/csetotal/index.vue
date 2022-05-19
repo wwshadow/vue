@@ -25,7 +25,7 @@
             height="700">
             <el-table-column prop="fields.cseid" label="cseID" width="180">
               <template slot-scope="scope">
-                <el-link type="primary" :href="'/#/cseinfo/' " target="_blank">
+                <el-link type="primary" :href="'/#/cseinfo/?csekey=' + scope.row.fields.cseid" target="_blank">
                   {{ scope.row.fields.cseid }}</el-link>
               </template>
             </el-table-column>

@@ -7,7 +7,7 @@
         <span class="csename">{{ item.csename }}</span>
       </template>
     </el-autocomplete>
-    <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
+    <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search(state)">
       搜索</el-button>
     <el-row class="jiracse" :gutter="20">
       <el-col :span="9" style="margin-top: 20px">
@@ -132,33 +132,45 @@ export default {
       },
     }
   },
-  // watch: {
-  //   '$roure'(to,from){
-  //     console.log(to)
-  //     console.log(from)
-  //   }
-  // },
+  watch: {
+
+    $route: {
+      immediate: true,
+      handler() {
+        console.log(this.$route)
+        console.log(this.$route.query)
+        let newvalue = this.$route.query
+        console.log("tst", newvalue['csekey'])
+        this.search(newvalue['csekey'])
+      }
+
+    }
+  },
   methods: {
-    search() {
-      this.getCseInfo(),
-        this.getCseChildInfo(),
-        this.getCseChildType(),
-        this.getCseMonth()
+    search(val) {
+      console.log("search", val)
+      this.getCseInfo(val),
+        this.getCseChildInfo(val),
+        this.getCseChildType(val),
+        this.getCseMonth(val)
     },
-    getCseInfo() {
+    getCseInfo(val) {
+      console.log("getcseinfo", val)
       axios
         .get('/cse/', {
-          params: { csekey: this.state },
+          params: { csekey: val },
+
         })
         .then((response) => (this.info = response.data))
         .catch((err) => {
           console.log(err)
         })
     },
-    getCseChildInfo() {
+    getCseChildInfo(val) {
       axios
         .get('/csechild/', {
-          params: { csekey: this.state },
+          params: { csekey: val },
+
         })
         .then((response) => {
           this.tableData = response.data
@@ -167,10 +179,11 @@ export default {
           console.log(err)
         })
     },
-    getCseChildType() {
+    getCseChildType(val) {
       axios
         .get('/csetype/', {
-          params: { csekey: this.state },
+          params: { csekey: val },
+          // params: val
         })
         .then((response) => (this.caseTypeData = response.data))
         .catch((err) => {
@@ -218,14 +231,11 @@ export default {
     handleSelect(item) {
       console.log('item', item)
     },
-  },
-  mounted() {
-    this.loadAll2()
-    var that = this
-    that.getCseMonth = function () {
+    getCseMonth(val) {
       axios
         .get('/csemonth/', {
-          params: { csekey: this.state },
+          params: { csekey: val },
+          // params: val
         })
         .then((response) => {
           this.echartData.csenum.xData = this.tableDataByMouth
@@ -241,6 +251,30 @@ export default {
           console.log(err)
         })
     }
+  },
+  mounted() {
+    this.loadAll2()
+    // var that = this
+    // that.getCseMonth = function (val) {
+    //   axios
+    //     .get('/csemonth/', {
+    //       params: { csekey: val },
+    //       // params: val
+    //     })
+    //     .then((response) => {
+    //       this.echartData.csenum.xData = this.tableDataByMouth
+    //       this.echartData.csenum.series = [
+    //         {
+    //           name: '当年每月cse量',
+    //           data: Object.values(response.data),
+    //           type: 'bar',
+    //         },
+    //       ]
+    //     })
+    //     .catch((err) => {
+    //       console.log(err)
+    //     })
+    // }
   },
 }
 </script>
