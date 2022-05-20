@@ -137,10 +137,9 @@ export default {
     $route: {
       immediate: true,
       handler() {
-        console.log(this.$route)
-        console.log(this.$route.query)
+        // console.log(this.$route)
+        // console.log(this.$route.query)
         let newvalue = this.$route.query
-        console.log("tst", newvalue['csekey'])
         this.search(newvalue['csekey'])
       }
 
@@ -148,14 +147,13 @@ export default {
   },
   methods: {
     search(val) {
-      console.log("search", val)
       this.getCseInfo(val),
         this.getCseChildInfo(val),
         this.getCseChildType(val),
         this.getCseMonth(val)
     },
     getCseInfo(val) {
-      console.log("getcseinfo", val)
+
       axios
         .get('/cse/', {
           params: { csekey: val },
