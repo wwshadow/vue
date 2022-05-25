@@ -12,7 +12,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人信息</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item @click.native="logout"> 退出</el-dropdown-item>
 
         </el-dropdown-menu>
       </el-dropdown>
@@ -35,14 +35,17 @@ header {
   justify-content: space-between;
   align-items: center;
 }
+
 .l-content {
   display: flex;
   align-content: center;
   align-items: center;
+
   .el-button {
     margin-right: 20px;
   }
 }
+
 .r-content {
   .user {
     width: 40px;
@@ -63,6 +66,11 @@ export default {
     handleMenu() {
       this.$store.commit('collapseMenu')
     },
+    logout() {
+      console.log("tuichu")
+      this.$store.commit('clearToken')
+      this.$router.push({ name: 'login' })
+    }
   },
 }
 </script>

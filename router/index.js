@@ -11,6 +11,7 @@ Vue.use(VueRouter)
 //     return VueRouterPush.call(this, to).catch(err => err)
 // }
 const routes = [
+
     {
         path: '/',
         name: 'Main',
@@ -54,17 +55,18 @@ const routes = [
         //     name: 'Ecs',
         //     component: () => import('../src/components/door.vue'),
     },
-    // {
-    //     path: '/cse',
-    //     name: 'cse',
-    //     component: () => import('../src/components/cse.vue'),
-    // }
+    {
+        path: '/login',
+        name: 'login',
+        component: () => import('../views/Login/login.vue'),
+    }
 ]
 
 const router = new VueRouter({
     // model: 'hash',
-    model: 'history',
-    // base: process.env.BASE_URL,
     routes,
+    mode: 'history',
+    // base: process.env.BASE_URL,
+
 })
 export default router

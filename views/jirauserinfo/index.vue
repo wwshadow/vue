@@ -149,7 +149,7 @@ export default {
       info: {},
       restaurants: [],
       esdeskid: '',
-      workerId: '5f812189287870006a5c85b4',
+      workerId: '',
       timeout: null,
       list1: [],
       filldatetime: '',

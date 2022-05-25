@@ -91,7 +91,7 @@ export default {
       restaurants: [],
       state: '',
       timeout: null,
-      searchInput: 'cse-1589',
+      searchInput: '',
       list1: [],
       tableData: [
         {
@@ -140,7 +140,15 @@ export default {
         // console.log(this.$route)
         // console.log(this.$route.query)
         let newvalue = this.$route.query
-        this.search(newvalue['csekey'])
+
+        if (newvalue['csekey']) {
+          console.log(newvalue)
+          this.search(newvalue['csekey'])
+        }
+        else {
+          console.log("buweikong", newvalue)
+
+        }
       }
 
     }

@@ -4,8 +4,9 @@ import {
   Button, Radio, Container, Main, Header, Aside, Menu, Submenu, MenuItem, MenuItemGroup, Dropdown, DropdownItem,
   DropdownMenu, Row, Card, Col, Table, TableColumn, Input, Autocomplete, Link, Loading, Descriptions, DescriptionsItem
   , Select, Option, OptionGroup, Switch, Dialog, Form, FormItem,
-  DatePicker, Tooltip, Carousel, CarouselItem,Pagination
+  DatePicker, Tooltip, Carousel, CarouselItem, Pagination,
 } from 'element-ui';
+// MessageBox, Message
 import 'element-ui/lib/theme-chalk/index.css';
 // 这里通过ipmport 进行按需引入 Vue.use进行使用，这样的方法适合在大的项目中使用  
 // 按需引入是有点麻烦 小项目尽量使用全局
@@ -57,12 +58,17 @@ Vue.use(Tooltip)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(Pagination)
+// Vue.use(MessageBox)
+
+// Vue.use(Message)
 
 Vue.use(VueResource)
 
 
 import axios from 'axios';
 Vue.prototype.$axios = axios
+// Vue.prototype.$prompt = MessageBox.prompt
+// Vue.prototype.$message = Message
 // Vue.prototype.$axios = axios.create({
 //   baseURL: "http://192.168.10.130:8100",
 //   headers: {
@@ -77,6 +83,17 @@ axios.defaults.headers = {
 }
 // import http from 'axios'
 // Vue.prototype.$http = http
+
+router.beforeEach((to, from, next) => {
+  store.commit('getToken')
+  const token = store.state.user.token
+  if (!token && to.name !== 'login') {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+})
+
 new Vue({
   router,
   store,
