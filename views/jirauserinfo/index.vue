@@ -11,15 +11,15 @@
     </el-autocomplete>
     <el-button style="margin-left: 10px;" type="primary" icon="el-icon-search" v-on:click="search">
       搜索</el-button>
-    <el-row class="jirauser" :gutter="25">
-      <el-col :span="12" style="margin-top: 20px">
+    <el-row class="jirauser" :gutter="20">
+      <el-col :span="16" style="margin-top: 20px">
         <el-card shadow="hover">
           <div class="user">
             <img height="50px" width="50px" border-radius=50%; :src="usrimg" />
             <div class="userinfo">
-              <p class="name">用户名称：</p><span>{{ info.customername }}</span>
+              <p class="name">用户名称：</p><span>{{ info.jiraname }}</span>
               <p class="access">所属部门：</p><span>{{ info.projectname }}</span>
-              <p class="fullname">邮箱/id：</p><span>{{ info.fullname }}</span>
+              <p class="fullname">邮箱/id：</p><span>{{ info.jiraemail }}</span>
             </div>
           </div>
         </el-card>
@@ -48,8 +48,7 @@
             </el-table-column>
             <el-table-column prop="issuestatus" label="case状态" width="90">
             </el-table-column>
-            <el-table-column fixed="right" label="操作">
-
+            <el-table-column label="填写工时" width="120">
               <template slot-scope="scope">
                 <!-- slot-scope="scope" -->
                 <!-- <p>姓名: {{ scope.row.issueid }}</p> -->
@@ -101,6 +100,85 @@
                 </el-dialog>
               </template>
             </el-table-column>
+            <el-table-column prop="estotp" label="双因子" width="120">
+              <template slot-scope="scope">
+                <!-- slot-scope="scope" -->
+                <!-- <p>姓名: {{ scope.row.issueid }}</p> -->
+                <el-button @click="dialogFormVisibletotp = true, getesdeskinfos(scope.row.issueid)" type="primary"
+                  icon="el-icon-edit" size="small">
+                  双因子申请
+                  <!-- <tompe-dialog :dialogVisible="Visible" @childFn="receive" :childid="scope.row.issueid" >
+                  </tompe-dialog> -->
+                  <!-- <p>{{dialogVisible}}</p> -->
+                </el-button>
+                <el-dialog title="双因子申请" :visible.sync="dialogFormVisibletotp" :modal=false>
+
+                  <el-dialog width="30%" title="双因子密码" :visible.sync="innerVisible" append-to-body>
+
+                    <el-table :data="totppwstable">
+                      <el-table-column property="customer" label="客户" width="120"></el-table-column>
+                      <el-table-column property="project" label="项目" width="110"></el-table-column>
+                      <el-table-column property="timestamp" label="时间" width="95"></el-table-column>
+                      <el-table-column property="totp_type" label="双因子类型" width="60"></el-table-column>
+                      <el-table-column property="totp_version" label="平台版本" width="60"></el-table-column>
+                      <el-table-column property="totp_pass" label="双因子"></el-table-column>
+                    </el-table>
+                    <div slot="footer" class="dialog-footer">
+                      <el-button @click="innerVisible = false">取 消</el-button>
+                      <el-button type="primary" @click="innerVisible = false, dialogFormVisibletotp = false">确 定
+                      </el-button>
+                    </div>
+                  </el-dialog>
+
+                  <el-form :model="totpdata">
+                    <el-form-item label="选择版本" :label-width="formLabelWidth">
+                      <el-radio v-model="totp_version" label="V5">V5</el-radio>
+                      <el-radio v-model="totp_version" label="V6">V6</el-radio>
+                    </el-form-item>
+                    <el-form-item label="totp_type" :label-width="formLabelWidth">
+                      <el-radio v-model="totp_type" label="roller">roller</el-radio>
+                      <el-radio v-model="totp_type" label="totp">双因子动态密码</el-radio>
+                    </el-form-item>
+                    <el-form-item label="esdesk id" :label-width="formLabelWidth">
+                      <el-input v-model="totpdata.issue" autocomplete="on"></el-input>
+                    </el-form-item>
+                    <el-form-item label="cse id" :label-width="formLabelWidth">
+                      <el-input v-model="totpdata.cseid" autocomplete="on"></el-input>
+                    </el-form-item>
+                    <el-form-item label="客户名称" :label-width="formLabelWidth">
+                      <el-input v-model="totpdata.customer" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="项目名称" :label-width="formLabelWidth">
+                      <el-input v-model="totpdata.project" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <!-- <el-form-item label="totp_version" :label-width="formLabelWidth">
+                      <el-input v-model="totp_version" autocomplete="off"></el-input>
+                    </el-form-item> -->
+
+                    <el-form-item label="审核者" :label-width="formLabelWidth">
+                      <el-input v-model="totpdata.auditor" autocomplete="off"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="申请原因" :label-width="formLabelWidth">
+                      <el-input v-model="totpdata.reason" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="动态密码" :label-width="formLabelWidth">
+                      <el-input v-model="Dynamicpwd" autocomplete="off"></el-input>
+                    </el-form-item>
+
+                  </el-form>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisibletotp = false">取 消</el-button>
+                    <el-button type="primary" @click="posttotp()">确 定</el-button>
+                  </div>
+                </el-dialog>
+              </template>
+            </el-table-column>
+            <!-- // fixed="right" -->
+
+            <!-- <el-table-column v-model="tableData.totppwd" label="双因子密码" width="90">
+            </el-table-column> -->
+
           </el-table>
         </el-card>
       </el-col>
@@ -138,6 +216,7 @@
 <script>
 import axios from 'axios'
 // import TompeDialog from './TompeDialog.vue'
+import store from '../../store'
 export default {
   name: 'jiraUserInfo',
   // components: {
@@ -146,14 +225,45 @@ export default {
   data() {
     return {
       usrimg: require('../../src/assets/images/OIP-C.jpg'),
-      info: {},
+      info: {
+        jiraname: '',
+        jiraemail: '',
+        projectname: '',
+        groups: ''
+      },
+      totppwstable: [{
+        customer: '',
+        project: '',
+        totp_pass: '',
+        totp_version: '',
+        totp_type: '',
+        timestamp: ''
+      }
+
+      ],
+      esdeskid: "",
       restaurants: [],
-      esdeskid: '',
-      workerId: '',
+
+      totpdata: {
+        issue: '',
+        auditor: '',
+
+        cseid: '',
+        customer: '',
+        project: '',
+        reason: '',
+
+      },
+      totp_version: 'V5',
+      totp_type: 'roller',
+      Dynamicpwd: '',
+      workerId: store.state.user.token,
       timeout: null,
+      dialogFormVisibletotp: false,
       list1: [],
       filldatetime: '',
       childid: '',
+      estotp: '',
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now()
@@ -194,20 +304,19 @@ export default {
           issuetype: '',
           issuestatus: '',
           timespent: '',
+          totppwd: '123131'
         },
       ],
+      innerVisible: false,
       Visible: false,
       dialogFormVisible: false,
-      form: {
-        name: '',
-        region: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
-      },
+      form: {},
+
       formLabelWidth: '120px',
     }
+  },
+  created() {
+    this.search()
   },
   watch: {
     // eslint-disable-next-line vue/no-arrow-functions-in-watch
@@ -219,6 +328,31 @@ export default {
     async getdeskinfo(rs) {
       return this.esdeskid = rs
     },
+    async getesdeskinfos(rs) {
+      // console.log("sss", rs)
+      axios({
+        method: 'get',
+        url: '/esdesk/',
+        params: {
+          esdeskid: rs,
+          // test: this.workerId
+        },
+      })
+
+        .then((response) => {
+          // console.log(response)
+          this.totpdata = response.data
+          // this.tableData.totp_type = this.tableData.totp_type,
+          // this.tableData.totp_version = this.tableData.totp_version
+          return this.totpdata.issue = rs
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    // getesdeskinfo(rs) {
+    //   return this.esdeskid = rs
+    // },
     sss() { },
     showdialog() {
       this.Visible = true
@@ -226,16 +360,16 @@ export default {
     receive() {
       this.Visible = false
     },
-    async getesdeskid(rows) {
-      this.childid = rows
-      console.log("rows", rows)
-    },
+    // async getesdeskid(rows) {
+    //   this.childid = rows
+    //   console.log("rows", rows)
+    // },
 
 
 
     posttempo(esdeskid) {
       // let resdata = []
-      console.log(esdeskid)
+      // console.log(esdeskid)
       axios({
         url: '/filltompe/',
         method: 'post',
@@ -255,7 +389,7 @@ export default {
         .then((response) => {
           // console.log(response.data.data)
           if (response.data === 'ok') {
-            console.log("sss")
+
             alert("完成")
             this.dialogFormVisible = !this.dialogFormVisible
           }
@@ -275,10 +409,62 @@ export default {
           // console.log(err)
           alert(err)
         })
+
     },
+    posttotp() {
+      // let resdata = []
+      // console.log(esdeskid)
+      axios({
+        url: '/estotp/',
+        method: 'post',
+        data: {
+          jiraemail: this.info.jiraemail,
+          Dynamicpwd: this.Dynamicpwd,
+          datas: this.totpdata,
+          totp_version: this.totp_version,
+          totp_type: this.totp_type,
+        },
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          console.log(response)
+          if (response.data === '未认证') {
+            console.log("response", response)
+            alert(response.data, "重新输入动态密码")
+            // this.dialogFormVisible = !this.dialogFormVisible
+          }
+          else if (response.data === 401) {
+            console.log("401", response.data)
+            // this.dialogFormVisible = !this.dialogFormVisible
+            alert("认证失败")
+          }
+
+          else {
+            console.log("200", response.data)
+            // console.log(response.data.totp_pass)
+
+            // this.dialogFormVisibletotp = !this.dialogFormVisibletotp
+            // alert("填写完成")
+            this.totppwstable[0] = response.data
+            // console.log(this.totppwstable)
+            this.innerVisible = true
+
+
+          }
+        })
+        .catch((err) => {
+          // console.log(err)
+          alert(err)
+        })
+    },
+
     search() {
       // this.getCseInfo()
       this.GetUserCaseInfo()
+      this.GetJirauserInfo()
     },
     handleClick(row) {
       console.log('update不行  可以采用另一个方案')
@@ -302,21 +488,8 @@ export default {
         )
       }
     },
-    //暂时无用
-    loadAll() {
-      let resdata = []
-      axios({
-        // url: 'http://192.168.10.130:8080/csetotal.json',
-        modules: 'GET',
-      })
-        .then((res) => {
-          resdata = res
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-      return resdata.data
-    },
+
+
     loadAll2() {
       // let resdata = {}
       this.$http.get('http://192.168.10.130:8080/csetotal.json').then((res) => {
@@ -334,6 +507,20 @@ export default {
           params: { userid: this.workerId },
         })
         .then((response) => (this.tableData = response.data))
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    GetJirauserInfo() {
+      axios
+        .get('/jirauser', {
+          params: { jiraid: this.workerId },
+        })
+        .then((response) => {
+          // console.log(response.data)
+
+          this.info = response.data
+        })
         .catch((err) => {
           console.log(err)
         })

@@ -50,7 +50,7 @@ export default {
             var that = this
             axios(
                 {
-                    url: '/jirausr',
+                    url: '/jirauser',
                     method: 'post',
                     data: {
                         jiraemail: this.form.jiraemail,
@@ -63,7 +63,7 @@ export default {
                 })
                 .then(function (response) {
                     console.log('data', response.data)
-                    if (response.data === 'ok') {
+                    if (response.data != "") {
 
                         that.$store.commit('setToken', response.data)
                         that.$router.push({ name: 'home' })

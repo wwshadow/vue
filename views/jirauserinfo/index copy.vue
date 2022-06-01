@@ -16,7 +16,7 @@
         <el-card shadow="hover">
           <div class="user">
             <img height="50px" width="50px" border-radius=50%; :src="usrimg" />
-            <div class="userinfo">
+            <div class="info">
               <p class="name">用户名称：</p><span>{{ info.customername }}</span>
               <p class="access">所属部门：</p><span>{{ info.projectname }}</span>
               <p class="fullname">邮箱/id：</p><span>{{ info.fullname }}</span>

@@ -3,7 +3,7 @@ import App from './App.vue'
 import {
   Button, Radio, Container, Main, Header, Aside, Menu, Submenu, MenuItem, MenuItemGroup, Dropdown, DropdownItem,
   DropdownMenu, Row, Card, Col, Table, TableColumn, Input, Autocomplete, Link, Loading, Descriptions, DescriptionsItem
-  , Select, Option, OptionGroup, Switch, Dialog, Form, FormItem,
+  , Select, Option, OptionGroup, Switch, Dialog, Form, FormItem, RadioGroup,
   DatePicker, Tooltip, Carousel, CarouselItem, Pagination,
 } from 'element-ui';
 // MessageBox, Message
@@ -58,7 +58,7 @@ Vue.use(Tooltip)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(Pagination)
-// Vue.use(MessageBox)
+Vue.use(RadioGroup)
 
 // Vue.use(Message)
 
