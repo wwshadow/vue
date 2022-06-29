@@ -66,6 +66,7 @@ const router = new VueRouter({
     // model: 'hash',
     routes,
     mode: 'history',
+    // mode: 'hash',
     // base: process.env.BASE_URL,
 
 })

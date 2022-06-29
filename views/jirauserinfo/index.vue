@@ -223,6 +223,10 @@ export default {
   //   TompeDialog,
   // },
   data() {
+    this.$router.replace({
+      path: '/jirauserinfo',
+      name: 'jiraUserInfo'
+    })
     return {
       usrimg: require('../../src/assets/images/OIP-C.jpg'),
       info: {
@@ -322,6 +326,23 @@ export default {
     // eslint-disable-next-line vue/no-arrow-functions-in-watch
     Visible: (newvalue, oldvalue) => {
       console.log(newvalue, oldvalue)
+    },
+    $route: {
+      immediate: true,
+      handler() {
+        console.log('route', this.workerId)
+        this.search(this.workerId)
+        // let newvalue = this.$route.query
+
+        // if ) {
+        //   console.log()
+        //   this.search(workerId)
+        // }
+        // else {
+        //   console.log("buweikong", newvalue)
+
+        // }
+      }
     }
   },
   methods: {
@@ -462,7 +483,7 @@ export default {
     },
 
     search() {
-      // this.getCseInfo()
+
       this.GetUserCaseInfo()
       this.GetJirauserInfo()
     },

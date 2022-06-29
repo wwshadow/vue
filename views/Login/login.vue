@@ -62,12 +62,21 @@ export default {
                     },
                 })
                 .then(function (response) {
-                    console.log('data', response.data)
-                    if (response.data != "") {
+                    // console.log('data', response)
+                    // console.log('data', response.data[1])
+                    // console.log('data', response.data[0])
+                    if (response.data[0] === "ok") {
 
-                        that.$store.commit('setToken', response.data)
+                        that.$store.commit('setToken', response.data[1])
+
                         that.$router.push({ name: 'home' })
 
+                    }
+                    else if (response.data === "err") {
+
+                        // that.$store.commit('setToken', response.data)
+                        // that.$router.push({ name: 'login' })
+                        alert("账户密码异常，请重新输入")
                     } else {
                         alert("账户密码异常，请重新输入")
                     }

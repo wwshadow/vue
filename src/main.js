@@ -76,7 +76,8 @@ Vue.prototype.$axios = axios
 //     'Accept': 'application/json',
 //   }
 // })
-axios.defaults.baseURL = "http://192.168.10.130:8100/jirainfo/v1/"
+axios.defaults.baseURL = "http://esjirainfo.com:8100/jirainfo/v1/"
+// axios.defaults.baseURL = "http://192.168.10.130:8100/jirainfo/v1/"
 axios.defaults.headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',

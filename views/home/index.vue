@@ -233,7 +233,7 @@ export default {
       axios
         .get('/ecsbymonth')
         .then((response) => {
-          console.log("完整", response.data)
+          // console.log("完整", response.data)
           this.tableData = response.data
           this.loading = false
         })

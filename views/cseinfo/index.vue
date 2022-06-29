@@ -85,6 +85,7 @@ export default {
   // eslint-disable-next-line vue/no-unused-components
   components: { EChart },
   data() {
+    // this.$route.params.csekey
     return {
       usrimg: require('../../src/assets/images/OIP-C.jpg'),
       info: {},
@@ -154,6 +155,7 @@ export default {
     }
   },
   methods: {
+
     search(val) {
       this.getCseInfo(val),
         this.getCseChildInfo(val),
